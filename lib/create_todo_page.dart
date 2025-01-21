@@ -1,300 +1,271 @@
+import 'package:assignment_day_15/to_do_model.dart';
+import 'package:assignment_day_15/widget/custom_widget.dart';
+import 'package:assignment_day_15/widget/repeat_chip_widget.dart';
+import 'package:assignment_day_15/widget/set_remainder_widget.dart';
 import 'package:flutter/material.dart';
 
-class CreateTodoList extends StatefulWidget {
-  const CreateTodoList({super.key});
+class CreateToDoPage extends StatefulWidget {
+  const CreateToDoPage({super.key});
 
   @override
-  State<CreateTodoList> createState() => _CounterAppState();
+  State<CreateToDoPage> createState() => _CreateToDoState();
 }
-@override
-class _CounterAppState extends State<CreateTodoList> {
+
+class _CreateToDoState extends State<CreateToDoPage> {
+  late TextEditingController _titleController;
+  late TextEditingController _descriptionController;
+  String selectedRepeatChip = "No Repeat";
+  String selectedDay = "";
+
+  Set<String> selectedDays = {};
+
   @override
-  Widget build(BuildContext context){
+  void initState() {
+    super.initState();
 
+    _titleController = TextEditingController();
+    _descriptionController = TextEditingController();
+  }
+
+  void updateSelectedDays(String label) {
+    if (selectedDays.contains(label)) {
+      selectedDays.remove(label);
+    } else {
+      selectedDays.add(label);
+    }
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title:Text("Create to-do",style: TextStyle(
-           color: Colors.black,
-            fontWeight: FontWeight.w900,
-        fontSize: 45),),),
-     body: SafeArea(child: Column(
-       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-       children: [
-         Column(
-           children: [
-     
-             Column(
-               children: [
-                 Container(
-                   margin: EdgeInsets.only(right: 150,left: 20,top: 20),
-                    width: MediaQuery.of(context).size.width*0.5,
-                   height: MediaQuery.of(context).size.width*0.1,
+      body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.black,
+                      size: 30.0,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                  const Text(
+                    "Create to-do",
+                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900),
+                  ),
 
-                       decoration: BoxDecoration(
-                           borderRadius:BorderRadius.circular(15.0),
-                      border: Border.all(color: Colors.grey,width: 1.0),
+                  // SET REMINDER
+                  const SetReminderWidget(),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  const Text(
+                    "Tell us about your task",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black54),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  CustomTextFieldWidget(
+                    controller: _titleController,
+                    hint: "Title",
+                    maxLength: 100,
+                    minLines: 1,
+                    maxLines: 1,
+                    textType: TextInputType.text,
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  CustomTextFieldWidget(
+                    controller: _descriptionController,
+                    hint: "Description",
+                    maxLength: 500,
+                    minLines: 4,
+                    maxLines: 8,
+                    textType: TextInputType.multiline,
+                  ),
 
-                 ),
-                   child: Text("Set Remainder",style: TextStyle(
-                         fontSize: 20,fontWeight: FontWeight.w400),
-                       textAlign: TextAlign.center,),)
-               ],
-             ),
-           ],
-         ),
-       Container(
-         padding: EdgeInsets.only(top: 20,left: 30),
-         margin: EdgeInsets.only(right: 200.0),
-         child: Text("Tell us about your task",style: TextStyle(
-             color: Colors.grey,fontSize: 17,fontWeight: FontWeight.w400),),
-       ),
-        Container(
-          padding: EdgeInsets.only(right: 270),
-            margin: EdgeInsets.only(right: 40,left: 30),
-    width: MediaQuery.of(context).size.width*1.0,
-    height: 55 ,
-    decoration:
-    BoxDecoration(
+                  const SizedBox(
+                    height: 10.0,
+                  ),
 
-    borderRadius:BorderRadius.circular(18.0),
-      border: Border.all(color: Colors.grey,width: 1.0),
-    ),
-    child: Center(
-    child: Text("Title",style: TextStyle(
-    fontSize: 20,fontWeight: FontWeight.w400),
-    ),
-    )),
-         Container(
-           padding: EdgeInsets.only(top: 10,right: 200),
-             margin: EdgeInsets.only(right: 40,left: 30,top: 10),
-             width: MediaQuery.of(context).size.width*1.0,
-             height: 55 ,
-             decoration: BoxDecoration(
-               borderRadius:BorderRadius.circular(18.0),
-               border: Border.all(color: Colors.grey,width: 1.0),
-             ),
-             child: Center(
-               child: Text("Description",style: TextStyle(
-                   fontSize: 20,fontWeight: FontWeight.w400),
-                 textAlign: TextAlign.right,
-               ),
-             )),
- Container(
-     padding: EdgeInsets.only(left: 40),
-   margin: EdgeInsets.only(top: 40),
-     child:Text("Repeat",style: TextStyle(color: Colors.grey,fontSize: 20),),
- ),
-         Row(
-           children: [
-             Container(
-                 // padding: EdgeInsets.only(right: 270),
-                 margin: EdgeInsets.only(left: 30),
-                 // width: MediaQuery.of(context).size.width*1.0,
-                 height: 55 ,
-                 width: 100,
-                 decoration:
-                 BoxDecoration(
-                   color: Colors.black,
-                   borderRadius:BorderRadius.circular(30.0),
-                   border: Border.all(color: Colors.grey,width: 1.0),
-                 ),
-                 child: Center(
-                   child: Text("Daily",style: TextStyle(
-                       fontSize: 20,fontWeight: FontWeight.bold,color: Colors.grey),
-                   ),
-                 )),
-             Container(
-               // padding: EdgeInsets.only(right: 270),
-                 margin: EdgeInsets.only(left: 20),
-                 // width: MediaQuery.of(context).size.width*1.0,
-                 height: 55 ,
-                 width: 120,
-                 decoration:
-                 BoxDecoration(
-                   borderRadius:BorderRadius.circular(30.0),
-                   border: Border.all(color: Colors.grey,width: 1.0),
-                 ),
-                 child: Center(
-                   child: Text("Weekly",style: TextStyle(
-                       fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),
-                   ),
-                 )),
-             Container(
-               // padding: EdgeInsets.only(right: 270),
-                 margin: EdgeInsets.only(left: 20),
-                 // width: MediaQuery.of(context).size.width*1.0,
-                 height: 55 ,
-                 width: 100,
-                 decoration:
-                 BoxDecoration(
-                   borderRadius:BorderRadius.circular(30.0),
-                   border: Border.all(color: Colors.grey,width: 1.0),
-                 ),
-                 child: Center(
-                   child: Text("Monthly",style: TextStyle(
-                       fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),
-                   ),
-                 )),
-           ],
-         ),
-         Column(
-           children: [
-             Container(
-               // padding: EdgeInsets.only(right: 270),
-                 margin: EdgeInsets.only(left: 30,top: 10),
-                 // width: MediaQuery.of(context).size.width*1.0,
-                 height: 55 ,
-                 width: 150,
-                 decoration:
-                 BoxDecoration(
-                   borderRadius:BorderRadius.circular(30.0),
-                   border: Border.all(color: Colors.grey,width: 1.0),
-                 ),
-                 child: Center(
-                   child: Text("No Repeat",style: TextStyle(
-                       fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),
-                   ),
-                 )),
-           ],
-         ),
-         Row(
-           children: [
-             Container(
-               // padding: EdgeInsets.only(right: 270),
-                 margin: EdgeInsets.only(left: 20,top: 10),
-                 // width: MediaQuery.of(context).size.width*1.0,
-                 height: 55 ,
-                 width: 110,
-                 decoration:
-                 BoxDecoration(
-                   borderRadius:BorderRadius.circular(30.0),
-                   border: Border.all(color: Colors.grey,width: 1.0),
-                 ),
-                 child: Center(
-                   child: Text("Sunday",style: TextStyle(
-                       fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),
-                   ),
-                 )),
-             Container(
-               // padding: EdgeInsets.only(right: 270),
-                 margin: EdgeInsets.only(left: 20,top: 10),
-                 // width: MediaQuery.of(context).size.width*1.0,
-                 height: 55 ,
-                 width: 110,
-                 decoration:
-                 BoxDecoration(
-                   borderRadius:BorderRadius.circular(30.0),
-                   border: Border.all(color: Colors.grey,width: 1.0),
-                   color: Colors.black,
-                 ),
-                 child: Center(
-                   child: Text("Monday",style: TextStyle(
-                       fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
-                   ),
-                 )),
-             Container(
-               // padding: EdgeInsets.only(right: 270),
-                 margin: EdgeInsets.only(left: 20,top: 10),
-                 // width: MediaQuery.of(context).size.width*1.0,
-                 height: 55 ,
-                 width: 110,
-                 decoration:
-                 BoxDecoration(
-                   borderRadius:BorderRadius.circular(30.0),
-                   border: Border.all(color: Colors.grey,width: 1.0),
-                   color: Colors.black,
-                 ),
-                 child: Center(
-                   child: Text("Tuesday",style: TextStyle(
-                       fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
-                   ),
-                 )),
-           ],
-         ),
-         Column(
-           children: [
-             Row(
-               children: [
-                 Container(
-                   // padding: EdgeInsets.only(right: 270),
-                     margin: EdgeInsets.only(left: 20,top: 10),
-                     // width: MediaQuery.of(context).size.width*1.0,
-                     height: 55 ,
-                     width: 150,
-                     decoration:
-                     BoxDecoration(
-                       borderRadius:BorderRadius.circular(30.0),
-                       border: Border.all(color: Colors.grey,width: 1.0),
-                     ),
-                     child: Center(
-                       child: Text("Wednesday",style: TextStyle(
-                           fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),
-                       ),
-                     )),
-                 Container(
-                   // padding: EdgeInsets.only(right: 270),
-                     margin: EdgeInsets.only(left: 20,top: 10),
-                     // width: MediaQuery.of(context).size.width*1.0,
-                     height: 55 ,
-                     width: 120,
-                     decoration:
-                     BoxDecoration(
-                       borderRadius:BorderRadius.circular(30.0),
-                       color: Colors.black,
-                       border: Border.all(color: Colors.grey,width: 1.0),
-                     ),
-                     child: Center(
-                       child: Text("Thrusday",style: TextStyle(
+                  const Text(
+                    "Repeat",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black54),
+                  ),
 
-                           fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
-                       ),
-                     )),
-               ],
-             )
-           ],
-         ),
-         Column(
-           children: [
-             Row(
-               children: [
-                 Container(
-                   // padding: EdgeInsets.only(right: 270),
-                     margin: EdgeInsets.only(left: 20,top: 10),
-                     // width: MediaQuery.of(context).size.width*1.0,
-                     height: 55 ,
-                     width: 120,
-                     decoration:
-                     BoxDecoration(
-                       borderRadius:BorderRadius.circular(30.0),
-                       border: Border.all(color: Colors.grey,width: 1.0),
-                     ),
-                     child: Center(
-                       child: Text("Friday",style: TextStyle(
-                           fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),
-                       ),
-                     )),
-
-               Container(
-                 // padding: EdgeInsets.only(right: 270),
-                   margin: EdgeInsets.only(left: 20,top: 10),
-                   // width: MediaQuery.of(context).size.width*1.0,
-                   height: 55 ,
-                   width: 150,
-                   decoration:
-                   BoxDecoration(
-                     borderRadius:BorderRadius.circular(30.0),
-                     border: Border.all(color: Colors.grey,width: 1.0),
-                   ),
-                   child: Center(
-                     child: Text("Saturday",style: TextStyle(
-                         fontSize: 20,fontWeight: FontWeight.bold,color: Colors.black),
-                     ),
-                   )),
-               ],
-             )
-           ],
-         )
-    ])));
-
+                  Wrap(
+                    children: [
+                      RepeatChipWidget(
+                        label: "Daily",
+                        isSelected: selectedRepeatChip == "Daily",
+                        onItemClicked: (String label) {
+                          setState(() {
+                            selectedRepeatChip = label;
+                          });
+                        },
+                      ),
+                      RepeatChipWidget(
+                        label: "Weekly",
+                        isSelected: selectedRepeatChip == "Weekly",
+                        onItemClicked: (String label) {
+                          setState(() {
+                            selectedRepeatChip = "Weekly";
+                          });
+                        },
+                      ),
+                      RepeatChipWidget(
+                        label: "Monthly",
+                        isSelected: selectedRepeatChip == "Monthly" ? true : false,
+                        onItemClicked: (String label) {
+                          setState(() {
+                            selectedRepeatChip = "Monthly";
+                          });
+                        },
+                      ),
+                      RepeatChipWidget(
+                        label: "No Repeat",
+                        isSelected:
+                        selectedRepeatChip == "No Repeat" ? true : false,
+                        onItemClicked: (String label) {
+                          setState(() {
+                            selectedRepeatChip = "No Repeat";
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                  Wrap(
+                    children: [
+                      RepeatChipWidget(
+                        label: "Sunday",
+                        isSelected: selectedDays.contains("Sunday"),
+                        onItemClicked: (String label) {
+                          setState(() {
+                            updateSelectedDays(label);
+                          });
+                        },
+                      ),
+                      RepeatChipWidget(
+                        label: "Monday",
+                        isSelected: selectedDays.contains("Monday"),
+                        onItemClicked: (String label) {
+                          updateSelectedDays(label);
+                        },
+                      ),
+                      RepeatChipWidget(
+                        label: "Tuesday",
+                        isSelected: selectedDays.contains("Tuesday"),
+                        onItemClicked: (String label) {
+                          updateSelectedDays(label);
+                        },
+                      ),
+                      RepeatChipWidget(
+                        label: "Wednesday",
+                        isSelected: selectedDays.contains("Wednesday"),
+                        onItemClicked: (String label) {
+                          updateSelectedDays(label);
+                        },
+                      ),
+                      RepeatChipWidget(
+                        label: "Thursday",
+                        isSelected: selectedDays.contains("Thursday"),
+                        onItemClicked: (String label) {
+                          updateSelectedDays(label);
+                        },
+                      ),
+                      RepeatChipWidget(
+                        label: "Friday",
+                        isSelected: selectedDays.contains("Friday"),
+                        onItemClicked: (String label) {
+                          updateSelectedDays(label);
+                        },
+                      ),
+                      RepeatChipWidget(
+                        label: "Saturday",
+                        isSelected: selectedDays.contains("Saturday"),
+                        onItemClicked: (String label) {
+                          updateSelectedDays(label);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                            MaterialStateProperty.all(Colors.blue)),
+                        onPressed: () {
+                          saveToDoClicked();
+                        },
+                        child: const Text(
+                          "Save",
+                          style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white),
+                        )),
+                  )
+                ],
+              ),
+            ),
+          )),
+    );
   }
+
+  bool validateUserInput() {
+    if (_titleController.text.isEmpty) {
+      return false;
+    }
+    if (_descriptionController.text.isEmpty) {
+      return false;
+    }
+    return true;
   }
+
+  void saveToDoClicked() {
+    if (validateUserInput()) {
+      // 2. SAVE THE DATA
+      var todo = ToDoModel(
+        title: _titleController.text,
+        description: _descriptionController.text,
+        repeat: selectedRepeatChip,
+        days: selectedDays,
+        createdDate: DateTime.now(),
+      );
+      Navigator.of(context).pop(todo);
+    } else {
+      // 2. SHOW ERROR
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Please enter valid input"),
+        backgroundColor: Colors.purple,
+        showCloseIcon: true,
+      ));
+    }
+  }
+}

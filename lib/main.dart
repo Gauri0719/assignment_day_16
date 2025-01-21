@@ -1,6 +1,7 @@
-import 'package:assignment_day_15/to_do_list.dart';
+import 'package:assignment_day_15/splash_page.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: TaskListPage(),
+      home: SplashPage(),
     );
   }
 }
